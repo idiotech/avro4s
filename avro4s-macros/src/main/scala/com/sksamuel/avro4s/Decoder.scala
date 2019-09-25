@@ -459,8 +459,12 @@ object Decoder extends CoproductDecoders with TupleDecoders {
     implicit class RichSchema(s: Schema) {
       def hasField(fieldName: String): Boolean = s.getField(fieldName) != null
       def hasDefault(fieldName: String): Boolean = {
-        val field = s.getField(fieldName)
-        field != null && field.defaultVal() != null
+        try {
+          val field = s.getField(fieldName)
+          field != null && field.defaultVal() != null
+        } catch {
+          case e: org.apache.avro.AvroRuntimeException => false
+        }
       }
     }
 
