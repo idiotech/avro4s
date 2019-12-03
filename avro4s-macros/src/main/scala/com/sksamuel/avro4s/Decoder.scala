@@ -480,7 +480,8 @@ object Decoder extends CoproductDecoders with TupleDecoders {
         decoder.decode(default, readerSchema.getField(fieldName).schema)
       case null if scalaDefault != null => scalaDefault.asInstanceOf[T]
       case null if transient => None.asInstanceOf[T]
-      case _ => sys.error(s"Record $record does not have a value for $fieldName, no default was defined, and the field is not transient")
+      case null => None.asInstanceOf[T]
+      // case _ => sys.error(s"Record $record does not have a value for $fieldName, no default was defined, and the field is not transient")
     }
   }
 
